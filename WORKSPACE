@@ -89,3 +89,30 @@ android_ndk_repository(name = "androidndk")
 
 # Android SDK location and API is auto-detected from $ANDROID_HOME environment variable
 android_sdk_repository(name = "androidsdk")
+
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "build_bazel_rules_nodejs",
+    sha256 = "0f2de53628e848c1691e5729b515022f5a77369c76a09fbe55611e12731c90e3",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/2.0.1/rules_nodejs-2.0.1.tar.gz"],
+)
+
+load("@build_bazel_rules_nodejs//:index.bzl", "npm_install")
+
+# emscripten 2.0.14
+http_archive(
+    name = "emscripten",
+    sha256 = "e466cd47ddd4bf0acd645412fdf08eda6d232484e48e5a2643e08062a7a4cf56",
+    strip_prefix = "install",
+    url = "https://storage.googleapis.com/webassembly/emscripten-releases-builds/linux/fc5562126762ab26c4757147a3b4c24e85a7289e/wasm-binaries.tbz2",
+    build_file = "//toolchain:emscripten.BUILD",
+    type = "tar.bz2",
+)
+
+npm_install(
+    name = "npm",
+    package_json = "@emscripten//:emscripten/package.json",
+    package_lock_json = "@emscripten//:emscripten/package-lock.json",
+)

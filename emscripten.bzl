@@ -25,6 +25,7 @@ def xnnpack_emscripten_benchmark_linkopts():
         "-s ASSERTIONS=1",
         "-s ERROR_ON_UNDEFINED_SYMBOLS=1",
         "-s EXIT_RUNTIME=1",
+        "-s USE_PTHREADS=0",
         "-s ALLOW_MEMORY_GROWTH=1",
         "-s TOTAL_MEMORY=436207616",  # 416M
         "--pre-js $(location :preamble.js.lds)",

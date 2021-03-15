@@ -50,3 +50,14 @@ build:macos --apple_platform_type=macos
 
 build:macos_arm64 --config=macos
 build:macos_arm64 --cpu=darwin_arm64
+
+# emscripten_wasm
+build:emscripten_wasm --crosstool_top=//toolchain:emscripten
+build:emscripten_wasm --cpu=wasm
+build:emscripten_wasm --host_crosstool_top=@bazel_tools//tools/cpp:toolchain
+# Disable sandbox environment because emsdk caches files by writing to home directory.
+build:emscripten_wasm --spawn_strategy=local
+
+#build:wasm --crosstool_top=//toolchain:emscripten
+#build:wasm --cpu=wasm
+#build:wasm --host_crosstool_top=@bazel_tools//tools/cpp:toolchain
