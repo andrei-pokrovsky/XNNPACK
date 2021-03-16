@@ -1974,6 +1974,7 @@ static void SRCNN955(benchmark::internal::Benchmark* b) {
   b->Args({1, 372, 372,  5,  5,  0,  0, 1, 1, 1,   32,    1});
 }
 
+#if 0
 #ifndef XNN_NO_F16_OPERATORS
   BENCHMARK_CAPTURE(xnnpack_convolution_f16, mobilenet_v1, "MobileNet v1")->Apply(MobileNetV1)->UseRealTime();
   BENCHMARK_CAPTURE(xnnpack_convolution_f16, mobilenet_v2, "MobileNet v2")->Apply(MobileNetV2)->UseRealTime();
@@ -2121,6 +2122,18 @@ static void SRCNN955(benchmark::internal::Benchmark* b) {
   BENCHMARK_CAPTURE(armcl_convolution_f32, srcnn935, "SRCNN (9-3-5)")->Apply(SRCNN935)->UseRealTime();
   BENCHMARK_CAPTURE(armcl_convolution_f32, srcnn955, "SRCNN (9-5-5)")->Apply(SRCNN955)->UseRealTime();
 #endif  // BENCHMARK_ARM_COMPUTE_LIBRARY
+#endif
+
+// TeamsModel
+static void TeamsModel(benchmark::internal::Benchmark* b) {
+  b->ArgNames({"N", "H", "W", "KH", "KW", "PH", "PW", "S", "D", "G", "GCin", "GCout"});
+
+  /*       N   H    W   KH  KW  PH  PW  S  D  G  GCin  GCout */
+  b->Args({1, 24,  40,  3,  3,  1,  1,  1, 1, 1,   40,   24});
+}
+
+BENCHMARK_CAPTURE(xnnpack_convolution_f32, TeamsModel, "TeamsModel")->Apply(TeamsModel)->UseRealTime();
+
 
 #ifndef XNNPACK_BENCHMARK_NO_MAIN
 BENCHMARK_MAIN();
