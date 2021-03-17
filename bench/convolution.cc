@@ -2124,15 +2124,25 @@ static void SRCNN955(benchmark::internal::Benchmark* b) {
 #endif  // BENCHMARK_ARM_COMPUTE_LIBRARY
 #endif
 
-// TeamsModel
-static void TeamsModel(benchmark::internal::Benchmark* b) {
+// TeamsModel_indirect_hwc
+static void TeamsModel_indirect_hwc(benchmark::internal::Benchmark* b) {
   b->ArgNames({"N", "H", "W", "KH", "KW", "PH", "PW", "S", "D", "G", "GCin", "GCout"});
 
   /*       N   H    W   KH  KW  PH  PW  S  D  G  GCin  GCout */
   b->Args({1, 24,  40,  3,  3,  1,  1,  1, 1, 1,   40,   24});
 }
 
-BENCHMARK_CAPTURE(xnnpack_convolution_f32, TeamsModel, "TeamsModel")->Apply(TeamsModel)->UseRealTime();
+// TeamsModel Pointwise
+static void TeamsModel_pointwise(benchmark::internal::Benchmark* b) {
+    b->ArgNames({ "N", "H", "W", "KH", "KW", "PH", "PW", "S", "D", "G", "GCin", "GCout" });
+
+    /*       N   H    W   KH  KW  PH  PW  S  D  G  GCin  GCout */
+    b->Args({ 1, 48,  80,  1,  1,  0,  0,  1, 1, 1,   12,   72 });
+}
+
+BENCHMARK_CAPTURE(xnnpack_convolution_f32, TeamsModel_pointwise, "TeamsModel")->Apply(TeamsModel_pointwise)->UseRealTime();
+
+BENCHMARK_CAPTURE(xnnpack_convolution_f32, TeamsModel_indirect_hwc, "TeamsModel")->Apply(TeamsModel_indirect_hwc)->UseRealTime();
 
 
 #ifndef XNNPACK_BENCHMARK_NO_MAIN
